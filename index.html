@@ -1,607 +1,874 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nabin Gautam | Full-Stack Developer & AI Builder</title>
-    
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Tailwind Config for Custom Colors/Fonts -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    animation: {
-                        'spin-slow': 'spin 8s linear infinite',
-                    }
-                }
-            }
-        }
-    </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nabin Gautam — Final-Year BIM Student & Developer</title>
+<meta name="description" content="Nabin Gautam — Final-year BIM student at Tribhuvan University, Jhapa, Nepal. Full-stack web development, QA, and AI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08080a; --bg2:#0e0e11; --ink:#f2f1ed; --ink-dim:#8b8b86;
+  --line:rgba(242,241,237,.1); --accent:#d9ff3f; --accent-ink:#08080a;
+  --font-d:"Space Grotesk",sans-serif; --font-b:"Inter",sans-serif; --font-m:"JetBrains Mono",monospace;
+  --ease:cubic-bezier(.16,1,.3,1); --ease2:cubic-bezier(.83,0,.17,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-b);font-weight:340;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--accent);color:var(--accent-ink)}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:2px}
+.wrap{width:min(1500px,100% - clamp(2.2rem,7vw,9rem));margin-inline:auto}
+.mono{font-family:var(--font-m);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim)}
+.accent{color:var(--accent)}
+.label{display:flex;align-items:center;gap:1rem;margin-bottom:clamp(2.5rem,5vw,4.5rem)}
+.label .mono{color:var(--ink)}
+.label::after{content:"";height:1px;flex:1;background:var(--line);transform-origin:left}
 
-    <!-- Lucide Icons CDN -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+/* ---------- grain + progress ---------- */
+#grain{position:fixed;inset:-100%;z-index:90;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 8s steps(10) infinite}
+@keyframes grain{0%,100%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-5%)}60%{transform:translate(-3%,4%)}80%{transform:translate(4%,2%)}}
+#progress{position:fixed;top:0;left:0;height:2px;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:left;z-index:120}
 
-    <style>
-        /* Custom scrollbar for a premium feel */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #020617; /* slate-950 */
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b; /* slate-800 */
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #334155; /* slate-700 */
-        }
-    </style>
+/* ---------- preloader ---------- */
+#loader{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:flex-end;justify-content:space-between;padding:clamp(1.5rem,4vw,3rem)}
+#load-num{font-family:var(--font-d);font-weight:300;font-size:clamp(4rem,14vw,11rem);line-height:.85;letter-spacing:-.04em}
+#loader .bar{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:left}
+#loader-word{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-d);font-weight:500;text-transform:uppercase;letter-spacing:-.03em;
+  font-size:clamp(2rem,7vw,5rem);opacity:0;overflow:hidden}
+#loader-word span{display:inline-block}
+
+/* ---------- cursor ---------- */
+#cursor-dot,#cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:150;border-radius:50%;transform:translate(-50%,-50%)}
+#cursor-dot{width:6px;height:6px;background:var(--accent)}
+#cursor-ring{width:34px;height:34px;border:1px solid rgba(242,241,237,.35);transition:width .35s var(--ease),height .35s var(--ease),border-color .35s,background .35s;
+  display:flex;align-items:center;justify-content:center}
+#cursor-label{font-family:var(--font-m);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);opacity:0;transition:opacity .25s}
+body.cursor-grow #cursor-ring{width:70px;height:70px;border-color:var(--accent);background:rgba(217,255,63,.08)}
+body.cursor-view #cursor-ring{width:92px;height:92px;background:var(--accent);border-color:var(--accent)}
+body.cursor-view #cursor-label{opacity:1}
+body.cursor-view #cursor-dot{opacity:0}
+@media (hover:none),(pointer:coarse){#cursor-dot,#cursor-ring{display:none}}
+
+/* ---------- nav ---------- */
+header{position:fixed;top:0;left:0;right:0;z-index:100;transition:transform .5s var(--ease)}
+header.hidden{transform:translateY(-110%)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:1.4rem 0;transition:padding .4s var(--ease)}
+header.scrolled .nav{padding:.85rem 0}
+header.scrolled{background:rgba(8,8,10,.7);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.logo{font-family:var(--font-d);font-weight:600;font-size:1.05rem;letter-spacing:-.02em;z-index:2;transition:transform .4s var(--ease)}
+.logo:hover{transform:rotate(-4deg) scale(1.05)}
+.logo sup{color:var(--accent);font-size:.6em}
+.nav-links{display:flex;gap:2.2rem;align-items:center}
+.nav-links a{font-family:var(--font-m);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-dim);position:relative;padding:.3rem 0;transition:color .3s}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease)}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+.status{display:flex;align-items:center;gap:.55rem;font-family:var(--font-m);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim)}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2.2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,255,63,.5)}55%{box-shadow:0 0 0 7px rgba(217,255,63,0)}}
+#menu-btn{display:none;z-index:2}
+@media(max-width:860px){
+  .status{display:none}
+  .nav-links{position:fixed;inset:0;background:var(--bg);flex-direction:column;justify-content:center;gap:2.2rem;
+    clip-path:inset(0 0 100% 0);transition:clip-path .6s var(--ease2);z-index:1}
+  .nav-links.open{clip-path:inset(0 0 0 0)}
+  .nav-links a{font-size:clamp(1.8rem,7vw,2.6rem);font-family:var(--font-d);letter-spacing:-.02em;text-transform:none;color:var(--ink)}
+  #menu-btn{display:block;font-family:var(--font-m);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
+}
+
+/* ---------- hero ---------- */
+#webgl{position:absolute;inset:0;z-index:0}
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:clamp(2rem,4vh,3.5rem);padding-top:7rem;position:relative;overflow:hidden}
+.hero-inner{position:relative;z-index:2}
+.hero-meta{display:flex;justify-content:space-between;gap:1rem;margin-bottom:clamp(2rem,5vh,4rem);flex-wrap:wrap}
+h1{font-family:var(--font-d);font-weight:500;letter-spacing:-.045em;line-height:.9;font-size:clamp(3rem,11.5vw,11rem);text-transform:uppercase}
+h1 .row{display:block;overflow:hidden}
+h1 .row span{display:inline-block;will-change:transform}
+h1 .outline{-webkit-text-stroke:1.5px var(--ink);color:transparent}
+.hero-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:2.5rem;margin-top:clamp(2rem,5vh,3.5rem);flex-wrap:wrap}
+.hero-statement{max-width:36ch;font-size:clamp(1rem,1.4vw,1.2rem);line-height:1.55;color:var(--ink-dim)}
+.hero-statement strong{color:var(--ink);font-weight:500}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap}
+.btn{position:relative;display:inline-flex;align-items:center;gap:.7rem;padding:1rem 1.9rem;border:1px solid var(--line);border-radius:999px;
+  font-family:var(--font-m);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;overflow:hidden;transition:color .4s var(--ease),border-color .4s;will-change:transform}
+.btn::before{content:"";position:absolute;inset:0;background:var(--accent);border-radius:inherit;transform:translateY(101%);transition:transform .5s var(--ease2);z-index:0}
+.btn:hover{color:var(--accent-ink);border-color:var(--accent)}
+.btn:hover::before{transform:translateY(0)}
+.btn>*{position:relative;z-index:1}
+.btn.solid{background:var(--ink);color:var(--accent-ink);border-color:var(--ink)}
+.btn svg{width:14px;height:14px;transition:transform .4s var(--ease)}
+.btn:hover svg{transform:translate(3px,-3px)}
+.hero-scroll{position:absolute;right:clamp(1.25rem,3.5vw,4.5rem);bottom:clamp(2rem,4vh,3.5rem);writing-mode:vertical-rl;display:flex;align-items:center;gap:.8rem;z-index:2}
+.hero-scroll .line{width:1px;height:56px;background:var(--line);position:relative;overflow:hidden}
+.hero-scroll .line::after{content:"";position:absolute;inset:0;background:var(--accent);animation:scrollLine 2.2s var(--ease) infinite}
+@keyframes scrollLine{0%{transform:translateY(-100%)}55%,100%{transform:translateY(100%)}}
+@media(max-width:860px){.hero-scroll{display:none}}
+
+/* spinning badge */
+.spin-badge{position:absolute;top:clamp(6rem,14vh,9rem);right:clamp(1.5rem,6vw,7rem);width:clamp(7rem,12vw,10rem);aspect-ratio:1;z-index:3;pointer-events:none}
+.spin-badge svg{width:100%;height:100%;animation:spin 14s linear infinite}
+.spin-badge text{font-family:var(--font-m);font-size:8.4px;letter-spacing:.22em;text-transform:uppercase;fill:var(--ink-dim)}
+.spin-badge .core{position:absolute;inset:32%;border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-d);font-weight:600;color:var(--accent);font-size:clamp(.8rem,1.4vw,1.1rem)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:700px){.spin-badge{display:none}}
+
+/* ---------- marquee ---------- */
+.marquee{border-block:1px solid var(--line);padding:1.1rem 0;overflow:hidden;white-space:nowrap;position:relative;z-index:2;background:var(--bg)}
+.marquee-track{display:inline-flex;gap:3rem;will-change:transform;animation:marquee 26s linear infinite}
+.marquee span{font-family:var(--font-d);font-weight:400;font-size:clamp(1rem,2vw,1.5rem);letter-spacing:-.01em;color:var(--ink-dim)}
+.marquee span i{font-style:normal;color:var(--accent);margin-right:3rem}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ---------- stats ---------- */
+.stats{padding-block:clamp(5rem,10vw,8rem)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.stat{background:var(--bg);padding:clamp(1.8rem,3vw,3rem);transition:background .4s;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease2)}
+.stat:hover{background:var(--bg2)}
+.stat:hover::after{transform:scaleX(1)}
+.stat b{font-family:var(--font-d);font-weight:450;font-size:clamp(2.4rem,5vw,4.4rem);letter-spacing:-.04em;display:block;line-height:1}
+.stat b em{font-style:normal;color:var(--accent)}
+.stat .mono{margin-top:.9rem;display:block}
+@media(max-width:820px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ---------- work ---------- */
+.work{padding-block:clamp(6rem,12vw,10rem)}
+.work-head{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-bottom:clamp(2rem,4vw,3.5rem);flex-wrap:wrap}
+.work-head h2{font-family:var(--font-d);font-weight:500;font-size:clamp(2.2rem,6vw,5rem);letter-spacing:-.04em;text-transform:uppercase;line-height:1}
+.work-head h2 .outline{-webkit-text-stroke:1.5px var(--ink);color:transparent}
+.project{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:clamp(1rem,4vw,3rem);
+  padding:clamp(1.8rem,3.2vw,2.8rem) 0;border-top:1px solid var(--line);position:relative;cursor:pointer;will-change:transform}
+.project:last-of-type{border-bottom:1px solid var(--line)}
+.project .no{font-family:var(--font-m);font-size:.72rem;color:var(--ink-dim);white-space:nowrap}
+.project h3{font-family:var(--font-d);font-weight:500;letter-spacing:-.03em;font-size:clamp(1.8rem,4.6vw,3.9rem);line-height:1;
+  transition:transform .5s var(--ease),color .4s;text-transform:uppercase}
+.project .desc{color:var(--ink-dim);font-size:.92rem;margin-top:.55rem;max-width:52ch}
+.project .tags{font-family:var(--font-m);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-top:.7rem;opacity:.85}
+.project .price{font-family:var(--font-m);font-size:.7rem;letter-spacing:.1em;color:var(--ink-dim);border:1px solid var(--line);border-radius:999px;padding:.45rem 1rem;white-space:nowrap;transition:border-color .4s,color .4s,transform .4s var(--ease)}
+.project:hover h3{transform:translateX(clamp(.5rem,1.5vw,1.4rem));color:var(--accent)}
+.project:hover .price{border-color:var(--accent);color:var(--accent);transform:rotate(-3deg)}
+#preview{position:fixed;top:0;left:0;width:min(26rem,62vw);aspect-ratio:16/10;z-index:60;pointer-events:none;opacity:0;
+  transform:translate(-50%,-50%) scale(.85);border-radius:6px;overflow:hidden;will-change:transform;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+#preview canvas{width:100%;height:100%;display:block}
+@media (hover:none){#preview{display:none}}
+@media(max-width:700px){.project{grid-template-columns:1fr auto}.project .no{display:none}}
+
+/* ---------- about ---------- */
+.about{padding-block:clamp(6rem,12vw,10rem);background:var(--bg2);border-block:1px solid var(--line);position:relative;overflow:hidden}
+#orb{position:absolute;width:44rem;height:44rem;border-radius:50%;pointer-events:none;z-index:0;
+  background:radial-gradient(circle,rgba(217,255,63,.07),transparent 62%);transform:translate(-50%,-50%);left:70%;top:30%}
+.about-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(3rem,7vw,7rem);align-items:center;position:relative;z-index:1}
+.about h2{font-family:var(--font-d);font-weight:450;letter-spacing:-.03em;line-height:1.12;font-size:clamp(1.9rem,4.2vw,3.4rem)}
+.about h2 .w{display:inline-block;opacity:.13;will-change:opacity}
+
+/* ===== 3D PHOTO CARD ===== */
+.photo-scene{perspective:1000px;position:relative;width:min(100%,14.5rem);margin:0 auto 3.4rem}
+.photo-card{position:relative;border-radius:12px;aspect-ratio:4/5;background:#101014;transform-style:preserve-3d;
+  will-change:transform;box-shadow:0 24px 50px rgba(0,0,0,.55)}
+.photo-card .p-inner{position:absolute;inset:0;border-radius:12px;overflow:hidden;border:1px solid var(--line);transform:translateZ(0)}
+.photo-card img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;object-position:50% 30%;filter:grayscale(15%) contrast(1.05);transform:scale(1.06);transition:transform .8s var(--ease),filter .6s}
+.photo-card:hover img{transform:scale(1.12);filter:grayscale(0%) contrast(1.08)}
+.photo-card .photo-frame{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8rem;color:var(--ink-dim);background:repeating-linear-gradient(45deg,#101014,#101014 12px,#131318 12px,#131318 24px)}
+.photo-card .photo-frame svg{width:34px;height:34px;opacity:.5}
+.photo-card .photo-frame .mono{font-size:.6rem}
+.photo-card .glare{position:absolute;inset:0;border-radius:12px;pointer-events:none;z-index:3;
+  background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.22),transparent 45%);opacity:0;transition:opacity .4s;mix-blend-mode:overlay}
+.photo-card:hover .glare{opacity:1}
+.photo-card .badge{position:absolute;left:.7rem;bottom:.7rem;z-index:4;background:var(--accent);color:var(--accent-ink);font-family:var(--font-m);
+  font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;padding:.4rem .7rem;border-radius:999px;transform:translateZ(50px);box-shadow:0 10px 24px rgba(0,0,0,.4)}
+.photo-card .chip3d{position:absolute;z-index:4;font-family:var(--font-m);font-size:.52rem;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;
+  border:1px solid var(--line);background:rgba(14,14,17,.85);backdrop-filter:blur(6px);color:var(--ink);padding:.4rem .7rem;border-radius:999px;transform:translateZ(70px)}
+.chip3d.c1{top:5%;right:-14%}
+.chip3d.c2{bottom:20%;right:-18%}
+.chip3d.c3{top:40%;left:-16%}
+.photo-card .scan{position:absolute;inset:0;border-radius:12px;z-index:2;
+  background:linear-gradient(180deg,transparent 46%,rgba(217,255,63,.12) 50%,transparent 54%);
+  animation:scan 3.4s var(--ease) infinite;pointer-events:none}
+@keyframes scan{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
+.photo-shadow{position:absolute;left:10%;right:10%;bottom:-1.8rem;height:2rem;border-radius:50%;
+  background:radial-gradient(ellipse,rgba(0,0,0,.55),transparent 70%);filter:blur(6px);z-index:0}
+.about-side p{color:var(--ink-dim);line-height:1.7;font-size:.98rem;margin-bottom:1.4rem}
+.about-side p strong{color:var(--ink);font-weight:500}
+
+/* ===== FACTS — motion rows ===== */
+.about-facts{margin-top:2.5rem;border-top:1px solid var(--line)}
+.about-facts div{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.95rem .9rem;border-bottom:1px solid var(--line);
+  font-size:.9rem;position:relative;overflow:hidden;isolation:isolate;transition:color .35s}
+.about-facts div::before{content:"";position:absolute;inset:0;background:var(--accent);transform:scaleY(0);transform-origin:bottom;
+  transition:transform .45s var(--ease2);z-index:-1}
+.about-facts div:hover{color:var(--accent-ink)}
+.about-facts div:hover::before{transform:scaleY(1)}
+.about-facts div:hover .mono{color:var(--accent-ink)}
+.about-facts .mono{color:var(--accent);transition:color .35s;min-width:7rem}
+.about-facts .val{text-align:right;transition:transform .35s var(--ease)}
+.about-facts div:hover .val{transform:translateX(-6px)}
+.about-facts .arrow{font-family:var(--font-m);opacity:0;transform:translateX(-10px) rotate(-45deg);transition:all .35s var(--ease)}
+.about-facts div:hover .arrow{opacity:1;transform:translateX(0) rotate(0)}
+@media(max-width:900px){.about-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.chip3d.c1{right:-8%}.chip3d.c2{right:-10%}.chip3d.c3{left:-9%}}
+
+/* ---------- experience ---------- */
+.exp{padding-block:clamp(6rem,12vw,10rem);position:relative}
+.exp-line{position:absolute;left:clamp(0px,2vw,20px);top:clamp(6rem,12vw,10rem);bottom:clamp(6rem,12vw,10rem);width:1px;background:var(--line)}
+.exp-line i{position:absolute;inset:0;background:var(--accent);transform:scaleY(0);transform-origin:top}
+.exp-item{border-top:1px solid var(--line);padding:clamp(2.2rem,4vw,3.5rem) 0;position:relative}
+.exp-item:last-child{border-bottom:1px solid var(--line)}
+.exp-item::before{content:"";position:absolute;left:calc(clamp(0px,2vw,20px) - 4px);top:clamp(2.8rem,5vw,4.2rem);width:9px;height:9px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--accent);transition:background .3s,box-shadow .3s}
+.exp-item:hover::before{background:var(--accent);box-shadow:0 0 18px rgba(217,255,63,.6)}
+.exp-top{display:grid;grid-template-columns:13rem 1fr 1fr;gap:clamp(1rem,3vw,3rem);align-items:baseline;padding-left:clamp(1.5rem,4vw,3rem)}
+.exp-item .dates{font-family:var(--font-m);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.exp-item h3{font-family:var(--font-d);font-weight:500;font-size:clamp(1.3rem,2.2vw,1.8rem);letter-spacing:-.02em;transition:transform .4s var(--ease)}
+.exp-item:hover h3{transform:translateX(6px)}
+.exp-item .co{color:var(--ink-dim);font-size:.92rem;margin-top:.35rem}
+.exp-item p{color:var(--ink-dim);line-height:1.65;font-size:.93rem;max-width:56ch}
+.exp-projects{margin-top:1.8rem;display:flex;flex-wrap:wrap;gap:.7rem;padding-left:clamp(1.5rem,4vw,3rem)}
+.chip{font-family:var(--font-m);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);
+  border:1px solid var(--line);border-radius:999px;padding:.5rem 1.1rem;transition:all .35s var(--ease);cursor:default}
+.chip:hover{border-color:var(--accent);color:var(--accent-ink);background:var(--accent);transform:translateY(-2px) rotate(-2deg)}
+@media(max-width:900px){.exp-top{grid-template-columns:1fr}.exp-line{display:none}.exp-item::before{display:none}.exp-top,.exp-projects{padding-left:0}}
+
+/* ---------- SKILLS — motion tag wall ---------- */
+.skills{position:relative;padding-block:clamp(6rem,12vw,10rem);overflow:hidden;
+  background:repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(242,241,237,.028) 80px),
+             repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(242,241,237,.028) 80px), var(--bg2);
+  border-block:1px solid var(--line)}
+.skills-giant{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-d);font-weight:600;text-transform:uppercase;
+  font-size:clamp(6rem,22vw,20rem);letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px rgba(242,241,237,.05);
+  pointer-events:none;white-space:nowrap;z-index:0}
+.skill-rows{position:relative;z-index:1;display:flex;flex-direction:column}
+.skill-row{display:flex;align-items:center;gap:clamp(1rem,3vw,2.5rem);padding:clamp(1rem,2vw,1.6rem) 0;border-top:1px solid var(--line)}
+.skill-row:last-child{border-bottom:1px solid var(--line)}
+.row-tag{flex:0 0 auto;display:flex;align-items:center;gap:.6rem;min-width:clamp(7.5rem,13vw,11rem)}
+.row-tag::before{content:"";width:9px;height:9px;background:var(--accent);border-radius:1px;animation:tagBlink 2.4s var(--ease) infinite}
+@keyframes tagBlink{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(.6) rotate(45deg)}}
+.row-tag .mono{color:var(--ink)}
+.row-viewport{overflow:hidden;flex:1;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.row-track{display:flex;gap:clamp(.8rem,1.6vw,1.4rem);width:max-content;will-change:transform;padding-inline:1rem}
+.skill-chip{flex:0 0 auto;display:inline-flex;align-items:center;gap:.55em;font-family:var(--font-d);font-weight:500;
+  font-size:clamp(1.15rem,2.8vw,2.3rem);letter-spacing:-.02em;text-transform:uppercase;white-space:nowrap;
+  padding:.5em 1.05em;border-radius:999px;border:1px solid var(--line);color:var(--ink-dim);cursor:default;
+  transition:color .3s,border-color .3s,background .3s;will-change:transform}
+.skill-chip .dot{width:.32em;height:.32em;border-radius:50%;background:var(--accent);flex:0 0 auto}
+.skill-chip.ghost{color:transparent;-webkit-text-stroke:1px var(--ink-dim)}
+.skill-chip.fill{background:var(--ink);color:var(--accent-ink);border-color:var(--ink)}
+.skill-chip.hot{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.skill-chip.hot .dot{background:var(--accent-ink)}
+@media(hover:hover){
+  .skill-chip:hover{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .skill-chip:hover .dot{background:var(--accent-ink)}
+  .skill-row:hover .row-tag .mono{color:var(--accent)}
+}
+@media(max-width:700px){.row-tag{min-width:5.5rem}.row-tag .mono{font-size:.58rem}}
+
+/* ---------- contact ---------- */
+.contact{padding-block:clamp(7rem,14vw,12rem);position:relative;overflow:hidden}
+#orb2{position:absolute;width:40rem;height:40rem;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(217,255,63,.06),transparent 62%);transform:translate(-50%,-50%);left:20%;top:60%}
+.contact .mono{margin-bottom:1.5rem;display:block}
+.contact h2{font-family:var(--font-d);font-weight:500;letter-spacing:-.045em;line-height:.95;text-transform:uppercase;font-size:clamp(2.6rem,10vw,9.5rem);position:relative;z-index:1}
+.contact h2 .outline{-webkit-text-stroke:1.5px var(--ink);color:transparent}
+.contact h2 .row{display:block;overflow:hidden}
+.contact h2 .row span{display:inline-block}
+.contact-row{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;margin-top:clamp(2.5rem,5vw,4rem);flex-wrap:wrap;position:relative;z-index:1}
+.contact-links{display:flex;gap:1.8rem;flex-wrap:wrap}
+.contact-links a{font-family:var(--font-m);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-dim);position:relative;padding-bottom:.25rem;transition:color .3s,transform .3s var(--ease)}
+.contact-links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:right;transition:transform .45s var(--ease)}
+.contact-links a:hover{color:var(--ink);transform:translateY(-3px)}
+.contact-links a:hover::after{transform:scaleX(1);transform-origin:left}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:1.6rem 0;position:relative;overflow:hidden}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.foot .mono{display:flex;align-items:center;gap:.5rem}
+.giant{position:absolute;left:50%;bottom:-.28em;transform:translateX(-50%);font-family:var(--font-d);font-weight:600;text-transform:uppercase;
+  font-size:clamp(5rem,18vw,16rem);letter-spacing:-.04em;color:rgba(242,241,237,.04);pointer-events:none;white-space:nowrap;line-height:1}
+
+/* ---------- reveal defaults ---------- */
+.rv{opacity:0;transform:translateY(44px)}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .rv{opacity:1;transform:none}
+  #grain,.photo-card .scan{display:none}
+}
+</style>
+<base target="_blank">
+<base target="_blank">
 </head>
-<body class="bg-slate-950 text-slate-300 font-sans selection:bg-indigo-500/30 selection:text-white antialiased">
+<body>
 
-    <!-- NAVIGATION -->
-    <nav class="fixed w-full top-0 z-50 backdrop-blur-md bg-slate-950/70 border-b border-slate-800/50 transition-all duration-300">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="#" class="text-white font-bold tracking-tight text-xl flex items-center gap-1">
-                Nabin Gautam<span class="text-indigo-500">.</span>
-            </a>
-            <div class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
-                <a href="#about" class="hover:text-white transition-colors">About</a>
-                <a href="#skills" class="hover:text-white transition-colors">Skills</a>
-                <a href="#projects" class="hover:text-white transition-colors">Projects</a>
-                <a href="#journey" class="hover:text-white transition-colors">Journey</a>
-            </div>
-            <a href="#contact" class="px-5 py-2 rounded-full bg-slate-900 border border-slate-800 hover:border-slate-700 hover:bg-slate-800 text-white text-sm font-medium transition-all">
-                Let's Talk
-            </a>
-        </div>
+<div id="grain" aria-hidden="true"></div>
+<div id="progress" aria-hidden="true"></div>
+
+<div id="loader" aria-hidden="true">
+  <span class="mono">Nabin Gautam — Portfolio ©2026</span>
+  <span id="load-num">00</span>
+  <span id="loader-word">Builds</span>
+  <div class="bar"></div>
+</div>
+
+<div id="cursor-dot"></div>
+<div id="cursor-ring"><span id="cursor-label">View</span></div>
+<div id="preview" aria-hidden="true"><canvas id="preview-canvas" width="640" height="400"></canvas></div>
+
+<header id="header">
+  <div class="wrap nav">
+    <a class="logo" href="#top">NG<sup>©</sup></a>
+    <button id="menu-btn" aria-expanded="false" aria-controls="nav-links">Menu</button>
+    <nav class="nav-links" id="nav-links" aria-label="Primary">
+      <a href="#work">Projects</a>
+      <a href="#about">About</a>
+      <a href="#experience">Journey</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
     </nav>
+    <div class="status"><span class="pulse"></span>Final year — open to work</div>
+  </div>
+</header>
 
-    <!-- HERO SECTION -->
-    <section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
-        <!-- Subtle Background Glow -->
-        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none"></div>
-        
-        <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10 w-full">
-            <div>
-                <div class="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full bg-slate-900 border border-slate-800 text-xs font-medium text-indigo-400">
-                    <span class="relative flex h-2 w-2">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                    </span>
-                    Available for opportunities
-                </div>
-                <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-4 leading-tight">
-                    Hi, I'm <br/>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400">Nabin Gautam.</span>
-                </h1>
-                <h2 class="text-xl md:text-2xl text-slate-400 mb-6 font-light">
-                    Full-Stack Developer • AI Builder • Problem Solver
-                </h2>
-                <p id="about" class="text-slate-400 leading-relaxed mb-8 max-w-lg">
-                    I turn ideas into functional, modern software. Passionate about building scalable web applications and exploring how AI-assisted development can solve real-world problems.
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="#projects" class="px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-all flex items-center gap-2 shadow-[0_0_20px_-5px_rgba(79,70,229,0.4)]">
-                        View My Work <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </a>
-                    <a href="https://github.com/nabingautam7" target="_blank" class="px-6 py-3 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 hover:bg-slate-800 text-white font-medium transition-all flex items-center gap-2">
-                        <i data-lucide="github" class="w-4 h-4"></i> GitHub
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Abstract AI/Dev Visual -->
-            <div class="hidden md:flex justify-center">
-                <div class="relative w-80 h-80 border border-slate-800/60 rounded-full flex items-center justify-center bg-slate-900/30 shadow-2xl backdrop-blur-sm">
-                    <div class="absolute inset-0 rounded-full border-t border-indigo-500/50 animate-spin-slow"></div>
-                    <div class="absolute inset-4 rounded-full border-b border-cyan-500/30 animate-[spin_12s_linear_infinite_reverse]"></div>
-                    <div class="w-48 h-48 border border-slate-700 rounded-full flex items-center justify-center bg-slate-950 shadow-[inset_0_0_40px_rgba(0,0,0,0.8)] relative z-10">
-                        <i data-lucide="code-2" class="w-16 h-16 text-indigo-400"></i>
-                    </div>
-                </div>
-            </div>
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div id="webgl" aria-hidden="true"></div>
+    <div class="spin-badge" aria-hidden="true">
+      <svg viewBox="0 0 100 100"><defs><path id="circ" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
+      <text><textPath href="#circ">Final Year BIM · TU 2026 · Open to Work ·&#160;</textPath></text></svg>
+      <span class="core">NG</span>
+    </div>
+    <div class="wrap hero-inner">
+      <div class="hero-meta rv">
+        <span class="mono">Final-Year BIM Student / Aspiring Developer</span>
+        <span class="mono">Jhapa, Nepal — 26.64°N 87.99°E</span>
+        <span class="mono">Portfolio ©2026</span>
+      </div>
+      <h1 aria-label="Nabin Gautam Builds">
+        <span class="row"><span class="split">Nabin</span></span>
+        <span class="row"><span class="outline split">Gautam</span></span>
+        <span class="row"><span class="split">Builds<span class="accent">.</span></span></span>
+      </h1>
+      <div class="hero-bottom rv">
+        <p class="hero-statement">Final-year <strong>BIM student at Tribhuvan University</strong> — building clean, fast, and thoughtful web experiences as I get ready to step into the industry.</p>
+        <div class="hero-ctas">
+          <a class="btn solid magnetic" href="#work"><span>View my projects</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+          <a class="btn magnetic" href="#contact"><span>Get in touch</span></a>
         </div>
-    </section>
+      </div>
+    </div>
+    <div class="hero-scroll rv"><span class="mono">Scroll</span><span class="line"></span></div>
+  </section>
 
-    <!-- SKILLS SECTION -->
-    <section id="skills" class="py-24 bg-slate-900/30 border-y border-slate-800/50">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="mb-16 max-w-2xl">
-                <h3 class="text-3xl font-bold text-white mb-4">Technical Ecosystem.</h3>
-                <p class="text-slate-400 leading-relaxed">
-                    My development philosophy centers on choosing the right tools for the job. I specialize in the modern JavaScript ecosystem, strongly typed codebases, and AI workflows.
-                </p>
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track" id="marquee-track">
+      <span><i>◆</i>HTML & CSS</span><span><i>◆</i>JavaScript</span><span><i>◆</i>React</span><span><i>◆</i>Python</span><span><i>◆</i>SQL</span><span><i>◆</i>C & C++</span><span><i>◆</i>UI Design</span><span><i>◆</i>Git & GitHub</span>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <section class="stats wrap">
+    <div class="label rv"><span class="mono">The journey — measured in semesters</span></div>
+    <div class="stats-grid">
+      <div class="stat rv"><b><span class="count" data-to="8">0</span><em>/8</em></b><span class="mono">Semesters completed</span></div>
+      <div class="stat rv"><b><span class="count" data-to="15">0</span><em>+</em></b><span class="mono">Academic & side projects</span></div>
+      <div class="stat rv"><b><span class="count" data-to="20">0</span><em>+</em></b><span class="mono">Tools & technologies</span></div>
+      <div class="stat rv"><b><span class="count" data-to="4">0</span><em>th</em></b><span class="mono">Year — graduating soon</span></div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="work wrap" id="work">
+    <div class="label rv"><span class="mono">01 / The collection</span></div>
+    <div class="work-head rv">
+      <h2>Selected<br><span class="outline">Projects</span></h2>
+      <p class="mono" style="max-width:26ch;line-height:1.8">Things I've designed, coded, and broken — then fixed. Hover a row.</p>
+    </div>
+    <div id="project-list"></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div id="orb" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="label rv"><span class="mono">02 / The person</span></div>
+      <div class="about-grid">
+        <h2 id="about-statement">I'm Nabin Gautam — a final-year BIM student at Tribhuvan University who fell in love with code. I learn by building: class projects, side experiments, and everything in between, chasing clean design and working software.</h2>
+        <div class="about-side">
+          <!-- ======== 3D PHOTO: replace photo.jpeg with your image (portrait 4:5 works best) ======== -->
+          <div class="photo-scene rv">
+            <div class="photo-shadow" aria-hidden="true"></div>
+            <div class="photo-card" id="photo-card">
+              <div class="p-inner">
+                <!-- placeholder sits UNDER the photo; it only shows if photo.jpeg is missing -->
+                <div class="photo-frame">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20c1.4-3.6 4.2-5.4 7.5-5.4s6.1 1.8 7.5 5.4"/></svg>
+                  <span class="mono">Add photo.jpeg</span>
+                </div>
+                <img src="photo.jpeg" alt="Portrait of Nabin Gautam" onerror="this.style.display='none'">
+                <span class="scan"></span>
+                <div class="glare"></div>
+              </div>
+              <span class="chip3d c1">Final Year</span>
+              <span class="chip3d c2">BIM · TU</span>
+              <span class="chip3d c3">Class of 2026</span>
+              <span class="badge">Nabin Gautam</span>
             </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Frontend -->
-                <div class="p-6 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500/30 hover:-translate-y-1 transition-all duration-300 shadow-lg">
-                    <div class="w-12 h-12 rounded-lg bg-indigo-500/10 flex items-center justify-center mb-6 border border-indigo-500/20">
-                        <i data-lucide="layout-template" class="text-indigo-400"></i>
-                    </div>
-                    <h4 class="text-white font-semibold mb-4">Frontend</h4>
-                    <ul class="space-y-3 text-sm text-slate-400">
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>React & Next.js</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>TypeScript / JS</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>Tailwind CSS</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>HTML5 & CSS3</li>
-                    </ul>
-                </div>
-
-                <!-- Backend -->
-                <div class="p-6 rounded-xl bg-slate-950 border border-slate-800 hover:border-cyan-500/30 hover:-translate-y-1 transition-all duration-300 shadow-lg">
-                    <div class="w-12 h-12 rounded-lg bg-cyan-500/10 flex items-center justify-center mb-6 border border-cyan-500/20">
-                        <i data-lucide="server" class="text-cyan-400"></i>
-                    </div>
-                    <h4 class="text-white font-semibold mb-4">Backend</h4>
-                    <ul class="space-y-3 text-sm text-slate-400">
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>Node.js</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>RESTful APIs</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>Server-side logic</li>
-                    </ul>
-                </div>
-
-                <!-- Database -->
-                <div class="p-6 rounded-xl bg-slate-950 border border-slate-800 hover:border-purple-500/30 hover:-translate-y-1 transition-all duration-300 shadow-lg">
-                    <div class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center mb-6 border border-purple-500/20">
-                        <i data-lucide="database" class="text-purple-400"></i>
-                    </div>
-                    <h4 class="text-white font-semibold mb-4">Database</h4>
-                    <ul class="space-y-3 text-sm text-slate-400">
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>PostgreSQL</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>Prisma ORM</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>Data Modeling</li>
-                    </ul>
-                </div>
-
-                <!-- AI & Tools -->
-                <div class="p-6 rounded-xl bg-slate-950 border border-slate-800 hover:border-emerald-500/30 hover:-translate-y-1 transition-all duration-300 shadow-lg">
-                    <div class="w-12 h-12 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-6 border border-emerald-500/20">
-                        <i data-lucide="cpu" class="text-emerald-400"></i>
-                    </div>
-                    <h4 class="text-white font-semibold mb-4">AI & Tools</h4>
-                    <ul class="space-y-3 text-sm text-slate-400">
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>AI-Assisted Dev</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>Git & GitHub</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>VS Code & PowerShell</li>
-                    </ul>
-                </div>
-            </div>
+          </div>
+          <p>Wrapping up my <strong>8th semester of BIM</strong> at TU — deep into web technology, database management, and software engineering, while shipping side projects on weekends.</p>
+          <p>When I'm not studying, I'm sharpening my full-stack skills, exploring QA and AI, and learning how real software gets shipped.</p>
+          <div class="about-facts" id="about-facts">
+            <div><span class="mono">Name</span><span class="val">Nabin Gautam</span><span class="arrow">→</span></div>
+            <div><span class="mono">Education</span><span class="val">BIM, 8th Sem (Final Year) — TU</span><span class="arrow">→</span></div>
+            <div><span class="mono">Location</span><span class="val">Jhapa, Nepal (UTC+5:45)</span><span class="arrow">→</span></div>
+            <div><span class="mono">Focus</span><span class="val">Full-stack dev · QA · AI</span><span class="arrow">→</span></div>
+            <div><span class="mono">Status</span><span class="val">Open to internships & freelance</span><span class="arrow">→</span></div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- PROJECTS SECTION -->
-    <section id="projects" class="py-24">
-        <div class="max-w-6xl mx-auto px-6">
-            <h3 class="text-3xl font-bold text-white mb-12 flex items-center gap-3">
-                <i data-lucide="folder-code" class="text-indigo-400"></i> Featured Work.
-            </h3>
-            
-            <!-- Flagship Project Card -->
-            <div class="group rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden transition-all duration-500 hover:border-indigo-500/50 hover:shadow-[0_0_40px_-15px_rgba(99,102,241,0.2)]">
-                <div class="grid md:grid-cols-5 h-full">
-                    <div class="md:col-span-3 p-8 md:p-12 flex flex-col justify-center relative z-10">
-                        <div class="flex items-center gap-3 mb-6">
-                            <span class="px-3 py-1 text-xs font-semibold bg-indigo-500/10 text-indigo-400 rounded-full border border-indigo-500/20 uppercase tracking-wider">Flagship Project</span>
-                        </div>
-                        <h4 class="text-3xl font-bold text-white mb-4">AI Project Manager</h4>
-                        <p class="text-slate-400 mb-8 leading-relaxed">
-                            A modern full-stack project management platform enhanced with AI capabilities. Designed to streamline development workflows, organize tasks efficiently, and leverage AI for intelligent project insights.
-                        </p>
-                        
-                        <!-- Tech Stack Badges -->
-                        <div class="flex flex-wrap gap-2 mb-10">
-                            <span class="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-md text-xs font-medium text-slate-300">Next.js</span>
-                            <span class="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-md text-xs font-medium text-slate-300">React</span>
-                            <span class="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-md text-xs font-medium text-slate-300">TypeScript</span>
-                            <span class="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-md text-xs font-medium text-slate-300">Tailwind CSS</span>
-                            <span class="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-md text-xs font-medium text-slate-300">PostgreSQL</span>
-                            <span class="px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-md text-xs font-medium text-slate-300">Prisma</span>
-                        </div>
-                        
-                        <!-- Actions -->
-                        <div class="flex gap-4">
-                            <a href="#" class="flex items-center gap-2 text-sm font-medium text-slate-900 bg-white hover:bg-slate-200 px-5 py-2.5 rounded-lg transition-colors">
-                                <i data-lucide="external-link" class="w-4 h-4"></i> Live Demo
-                            </a>
-                            <a href="#" class="flex items-center gap-2 text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 px-5 py-2.5 rounded-lg transition-colors">
-                                <i data-lucide="github" class="w-4 h-4"></i> Source Code
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- Visual Representation -->
-                    <div class="md:col-span-2 bg-slate-950 border-l border-slate-800 flex items-center justify-center p-8 min-h-[350px] relative overflow-hidden">
-                        <!-- Abstract Dashboard Mockup -->
-                        <div class="w-full h-64 rounded-xl border border-slate-800 bg-slate-900 shadow-2xl relative overflow-hidden flex flex-col group-hover:scale-105 transition-transform duration-700">
-                            <!-- Window Header -->
-                            <div class="h-8 w-full border-b border-slate-800 flex items-center px-4 gap-1.5 bg-slate-950/50">
-                                <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
-                            </div>
-                            <!-- Mock Content -->
-                            <div class="flex-1 p-4 flex gap-4">
-                                <!-- Sidebar mock -->
-                                <div class="w-1/4 h-full rounded bg-slate-800/30 flex flex-col gap-2 p-2">
-                                    <div class="w-full h-3 rounded bg-slate-700/50"></div>
-                                    <div class="w-2/3 h-3 rounded bg-slate-700/50"></div>
-                                    <div class="w-full h-3 rounded bg-slate-700/50"></div>
-                                </div>
-                                <!-- Main content mock -->
-                                <div class="w-3/4 h-full flex flex-col gap-3">
-                                    <!-- AI Insight Card mock -->
-                                    <div class="w-full h-16 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center px-3 gap-3">
-                                        <div class="w-6 h-6 rounded bg-indigo-500/20 flex items-center justify-center"><i data-lucide="sparkles" class="w-3 h-3 text-indigo-400"></i></div>
-                                        <div class="w-2/3 h-2 rounded bg-indigo-400/30"></div>
-                                    </div>
-                                    <!-- Board mock -->
-                                    <div class="flex gap-2 flex-1">
-                                        <div class="flex-1 rounded bg-slate-800/20 border border-slate-800/50"></div>
-                                        <div class="flex-1 rounded bg-slate-800/20 border border-slate-800/50"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <!-- EXPERIENCE / JOURNEY -->
+  <section class="exp wrap" id="experience">
+    <div class="label rv"><span class="mono">03 / Education & journey</span></div>
+    <div class="exp-line" aria-hidden="true"><i id="exp-progress"></i></div>
+    <div id="exp-list"></div>
+  </section>
 
-    <!-- DEVELOPMENT JOURNEY -->
-    <section id="journey" class="py-24 bg-slate-900/30 border-t border-slate-800/50">
-        <div class="max-w-3xl mx-auto px-6">
-            <h3 class="text-3xl font-bold text-white mb-12 text-center">Development Journey.</h3>
-            
-            <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:Here is the complete, self-contained `.html` file. It uses Tailwind CSS (via CDN) for the premium styling, Google Fonts for modern typography, and Lucide Icons (via CDN) for the professional icons. 
+  <!-- SKILLS — MOTION TAG WALL -->
+  <section class="skills" id="skills">
+    <div class="skills-giant" id="skills-giant" aria-hidden="true">Skills</div>
+    <div class="wrap" style="position:relative;z-index:1">
+      <div class="label rv"><span class="mono">04 / What I work with — hover the wall</span></div>
+      <div class="skill-rows" id="skill-rows"></div>
+    </div>
+  </section>
 
-It maintains the exact dark-first, glassmorphic, and AI-focused aesthetic requested, all within a single file.
+  <!-- CONTACT -->
+  <section class="contact wrap" id="contact">
+    <div id="orb2" aria-hidden="true"></div>
+    <span class="mono rv">05 / Contact — Let's connect</span>
+    <h2 aria-label="Let's build something together">
+      <span class="row"><span>Let's build</span></span>
+      <span class="row"><span class="outline">something</span></span>
+      <span class="row"><span>together.</span></span>
+    </h2>
+    <div class="contact-row rv">
+      <!-- ======== EMAIL: replace with your email ======== -->
+      <a class="btn solid magnetic" href="mailto:hello@nabingautam.com.np"><span>hello@nabingautam.com.np</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg></a>
+      <div class="contact-links">
+        <!-- ======== SOCIAL LINKS: replace # with your real URLs ======== -->
+        <a href="https://github.com/itsnabin2027-netizen/">GitHub ↗</a>
+        <a href="https://www.linkedin.com/in/nabin-gautam-00a826251">LinkedIn ↗</a>
+        <a href="https://www.facebook.com/share/19LMPxL67j/">Facebook ↗</a>
+        <a href="https://www.instagram.com/nabin_dev_?stkn=Z2cwMnA0Y2Y0c3Y4">Instagram ↗</a>
+      </div>
+    </div>
+  </section>
 
-### How to use:
-1. Create a new file named `index.html`.
-2. Paste the code below into the file.
-3. Open `index.html` in any web browser.
+</main>
 
-```html
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nabin Gautam | Full-Stack Developer</title>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-    <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
-    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap)" rel="stylesheet">
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
-    
-    <!-- Tailwind Config for Custom Settings -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    animation: {
-                        'spin-slow': 'spin 12s linear infinite',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    }
-                }
-            }
-        }
-    </script>
+<footer>
+  <div class="wrap foot">
+    <span class="mono">Nabin Gautam — 2026</span>
+    <span class="mono"><span class="pulse"></span>Final year — open to opportunities</span>
+    <span class="mono">Jhapa, Nepal</span>
+  </div>
+  <div class="giant" aria-hidden="true">Gautam</div>
+</footer>
 
-    <!-- Lucide Icons CDN -->
-    <script src="[https://unpkg.com/lucide@latest](https://unpkg.com/lucide@latest)"></script>
-</head>
-<body class="bg-slate-950 text-slate-300 font-sans selection:bg-indigo-500/30 antialiased overflow-x-hidden">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+"use strict";
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+gsap.registerPlugin(ScrollTrigger);
 
-    <!-- NAVIGATION -->
-    <nav class="fixed w-full top-0 z-50 backdrop-blur-md bg-slate-950/70 border-b border-slate-800/50 transition-all duration-300">
-        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="#" class="text-white font-bold tracking-tight text-lg hover:text-indigo-400 transition-colors">
-                Nabin Gautam<span class="text-indigo-500">.</span>
-            </a>
-            <div class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
-                <a href="#about" class="hover:text-white transition-colors">About</a>
-                <a href="#skills" class="hover:text-white transition-colors">Skills</a>
-                <a href="#projects" class="hover:text-white transition-colors">Projects</a>
-                <a href="#journey" class="hover:text-white transition-colors">Journey</a>
-            </div>
-            <a href="#contact" class="hidden md:inline-flex items-center justify-center px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 text-white text-sm font-medium transition-all">
-                Let's Talk
-            </a>
-            <!-- Mobile Menu Button (Visual Only for snippet) -->
-            <button class="md:hidden text-slate-400 hover:text-white">
-                <i data-lucide="menu"></i>
-            </button>
-        </div>
-    </nav>
+/* ============ CENTRALIZED DATA — edit everything here ============ */
+const DATA = {
+  name: "Nabin Gautam",
+  projects: [
+    { no:"01", title:"AttendEase",     desc:"College attendance tracking system with student & admin dashboards.", tags:"PHP · MySQL · Bootstrap",        price:"Academic",   hue:75  },
+    { no:"02", title:"BIM Notes Hub",  desc:"Notes-sharing platform for BIM students — upload, search, download.", tags:"HTML · CSS · JavaScript · Firebase", price:"Side project", hue:200 },
+    { no:"03", title:"Canteen POS",    desc:"Point-of-sale system for campus canteens with daily sales reports.", tags:"Java · MySQL",                    price:"Academic",   hue:20  },
+    { no:"04", title:"Portfolio Site", desc:"This very site — animated, responsive, and built from scratch.", tags:"HTML · CSS · JS · Three.js",       price:"Live",       hue:150 },
+    { no:"05", title:"Weather Now",    desc:"Real-time weather app pulling live API data for Nepali cities.", tags:"JavaScript · REST API",            price:"Side project", hue:280 },
+    { no:"06", title:"QuizCraft",      desc:"Multiplayer quiz app for exam prep with leaderboards.", tags:"React · Node.js",                          price:"In progress", hue:330 },
+  ],
+  experience: [
+    { dates:"2025 — Present", role:"BIM, 8th Semester · Final Year", co:"Tribhuvan University",
+      desc:"Final stretch — capstone project, advanced web tech, and preparing to step into the industry.",
+      projects:["Capstone Project","Web Technology II","Software Engineering"] },
+    { dates:"2024 — 2025", role:"BIM, 5th–7th Semester", co:"Tribhuvan University",
+      desc:"Built strong foundations in databases, programming, and system design with hands-on labs.",
+      projects:["Database Management","Object-Oriented Programming","Computer Graphics"] },
+    { dates:"2023 — 2024", role:"BIM, 2nd–4th Semester", co:"Tribhuvan University",
+      desc:"Leveled up: data structures, operating systems, and the first projects I was truly proud of.",
+      projects:["Data Structures","Operating Systems","Discrete Math"] },
+    { dates:"2022 — 2023", role:"BIM, 1st Semester", co:"Tribhuvan University",
+      desc:"Started the journey — first lines of code, first broken builds, first proud deploys.",
+      projects:["Programming Fundamentals","Digital Logic","Statistics"] },
+  ],
+  skillRows: [
+    { label:"Frontend", items:["HTML & CSS","JavaScript","React","Next.js","Bootstrap","Tailwind","GSAP","Three.js"] },
+    { label:"Backend & DB", items:["Node.js","PHP","MySQL","PostgreSQL","Firebase","MongoDB","REST APIs","GraphQL"] },
+    { label:"Languages", items:["C","C++","Java","Python","SQL","TypeScript"] },
+    { label:"QA · AI · Tools", items:["Git & GitHub","Jest","Selenium","Postman","Docker","Figma","Linux","VS Code"] },
+  ]
+};
 
-    <!-- HERO SECTION -->
-    <section id="about" class="relative min-h-screen flex items-center pt-20 overflow-hidden">
-        <!-- Subtle Background Glow -->
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none"></div>
-        
-        <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10 w-full">
-            <div>
-                <div class="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full bg-slate-900 border border-slate-800 text-xs font-medium text-indigo-400">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                    </span>
-                    Available for opportunities
-                </div>
-                <h1 class="text-5xl md:text-7xl font-bold text-white tracking-tight mb-4">
-                    Hi, I'm <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Nabin.</span>
-                </h1>
-                <h2 class="text-xl md:text-2xl text-slate-400 mb-6 font-light">
-                    Full-Stack Developer • AI Builder
-                </h2>
-                <p class="text-slate-400 leading-relaxed mb-8 max-w-lg">
-                    I build modern, scalable, and user-focused web applications. Passionate about turning ideas into functional software using modern web technologies and AI-assisted development.
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="#projects" class="px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-all flex items-center gap-2 shadow-lg shadow-indigo-500/20">
-                        View My Work <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </a>
-                    <a href="[https://github.com/nabingautam7](https://github.com/nabingautam7)" target="_blank" class="px-6 py-3 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-white font-medium transition-all flex items-center gap-2">
-                        <i data-lucide="github" class="w-4 h-4"></i> GitHub
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Abstract AI/Dev Visual -->
-            <div class="hidden md:flex justify-center relative">
-                <div class="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 to-cyan-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
-                <div class="relative w-80 h-80 border border-slate-800 rounded-full flex items-center justify-center bg-slate-900/50 shadow-2xl backdrop-blur-sm">
-                    <div class="absolute inset-0 rounded-full border-t border-r border-indigo-500/50 animate-spin-slow"></div>
-                    <div class="absolute inset-4 rounded-full border-b border-l border-cyan-500/30 animate-[spin_10s_linear_infinite_reverse]"></div>
-                    <div class="w-48 h-48 border border-slate-700 rounded-full flex items-center justify-center bg-slate-950 shadow-inner">
-                        <i data-lucide="code-2" class="text-indigo-400 w-16 h-16"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+/* ============ RENDER LISTS ============ */
+document.getElementById("project-list").innerHTML = DATA.projects.map((p,i)=>`
+  <article class="project" data-i="${i}" aria-label="${p.title} — ${p.desc}">
+    <span class="no">No. ${p.no}</span>
+    <div><h3>${p.title}</h3><p class="desc">${p.desc}</p><div class="tags">${p.tags}</div></div>
+    <span class="price">${p.price}</span>
+  </article>`).join("");
 
-    <!-- SKILLS SECTION -->
-    <section id="skills" class="py-24 bg-slate-900/30 border-y border-slate-800/50 relative">
-        <div class="max-w-6xl mx-auto px-6">
-            <div class="mb-16 max-w-2xl">
-                <h3 class="text-3xl font-bold text-white mb-4">Technical Ecosystem.</h3>
-                <p class="text-slate-400 leading-relaxed">
-                    My development philosophy centers on choosing the right tools for the job. I specialize in the modern JavaScript ecosystem, strongly typed codebases, and AI workflows.
-                </p>
-            </div>
+document.getElementById("exp-list").innerHTML = DATA.experience.map(e=>`
+  <div class="exp-item rv">
+    <div class="exp-top">
+      <span class="dates">${e.dates}</span>
+      <div><h3>${e.role}</h3><div class="co">${e.co}</div></div>
+      <p>${e.desc}</p>
+    </div>
+    <div class="exp-projects">${e.projects.map(p=>`<span class="chip">▸ ${p}</span>`).join("")}</div>
+  </div>`).join("");
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Frontend -->
-                <div class="p-6 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500/50 transition-colors group">
-                    <div class="text-indigo-400 mb-4 bg-indigo-500/10 w-12 h-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="layout-template"></i>
-                    </div>
-                    <h4 class="text-white font-semibold mb-4">Frontend</h4>
-                    <ul class="space-y-2 text-sm text-slate-400">
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>React & Next.js</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>TypeScript</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>Tailwind CSS</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>HTML/CSS/JS</li>
-                    </ul>
-                </div>
+/* ============ RENDER SKILL ROWS — no percentages, pure motion ============ */
+document.getElementById("skill-rows").innerHTML = DATA.skillRows.map((r,i)=>`
+  <div class="skill-row">
+    <span class="row-tag"><span class="mono">0${i+1} — ${r.label}</span></span>
+    <div class="row-viewport"><div class="row-track" data-dir="${i%2===0?-1:1}">
+      ${[...r.items,...r.items].map((s,j)=>`
+        <span class="skill-chip ${j%5===2?"ghost":j%5===4?"fill":j%7===6?"hot":""}"><span class="dot"></span>${s}</span>`).join("")}
+    </div></div>
+  </div>`).join("");
 
-                <!-- Backend -->
-                <div class="p-6 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500/50 transition-colors group">
-                    <div class="text-cyan-400 mb-4 bg-cyan-500/10 w-12 h-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="server"></i>
-                    </div>
-                    <h4 class="text-white font-semibold mb-4">Backend</h4>
-                    <ul class="space-y-2 text-sm text-slate-400">
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>Node.js</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>REST APIs</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>Server-side Dev</li>
-                    </ul>
-                </div>
+const mt = document.getElementById("marquee-track");
+mt.innerHTML += mt.innerHTML;
 
-                <!-- Database -->
-                <div class="p-6 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500/50 transition-colors group">
-                    <div class="text-purple-400 mb-4 bg-purple-500/10 w-12 h-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="database"></i>
-                    </div>
-                    <h4 class="text-white font-semibold mb-4">Database</h4>
-                    <ul class="space-y-2 text-sm text-slate-400">
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>PostgreSQL</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>Prisma ORM</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>Data Modeling</li>
-                    </ul>
-                </div>
+/* ============ GENERATIVE PROJECT ART ============ */
+function drawArt(cv, seed, hue){
+  const c = cv.getContext("2d"), W = cv.width, H = cv.height;
+  let s = seed*9301+49297; const rnd = ()=> (s = (s*9301+49297)%233280)/233280;
+  const g = c.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,"#0c0c0f"); g.addColorStop(1,`hsl(${hue},30%,7%)`);
+  c.fillStyle = g; c.fillRect(0,0,W,H);
+  for(let i=0;i<16;i++){
+    c.beginPath();
+    const y = H*(0.12+0.76*i/16), amp = 16+rnd()*54, f = 0.004+rnd()*0.013, ph = rnd()*Math.PI*2;
+    for(let x=0;x<=W;x+=4) c.lineTo(x, y + Math.sin(x*f+ph)*amp);
+    c.strokeStyle = `hsla(${hue+rnd()*30-15},90%,62%,.9)`; c.lineWidth = 1.6;
+    c.globalAlpha = .2+.8*rnd(); c.stroke();
+  }
+  c.globalAlpha = 1;
+  for(let i=0;i<30;i++){ c.fillStyle = `hsla(${hue},90%,66%,${.3+rnd()*.7})`;
+    c.fillRect(rnd()*W, rnd()*H, 2+rnd()*5, 2+rnd()*5); }
+  c.strokeStyle = "rgba(242,241,237,.15)"; c.strokeRect(10.5,10.5,W-21,H-21);
+  c.fillStyle = "rgba(242,241,237,.9)"; c.font = "500 22px 'JetBrains Mono',monospace";
+  c.fillText("No. 0"+(seed+1), 26, H-26);
+}
 
-                <!-- Tools & AI -->
-                <div class="p-6 rounded-xl bg-slate-950 border border-slate-800 hover:border-indigo-500/50 transition-colors group">
-                    <div class="text-emerald-400 mb-4 bg-emerald-500/10 w-12 h-12 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <i data-lucide="cpu"></i>
-                    </div>
-                    <h4 class="text-white font-semibold mb-4">AI & Tools</h4>
-                    <ul class="space-y-2 text-sm text-slate-400">
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>AI-Assisted Dev</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>Prompt Engineering</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>Git & GitHub</li>
-                        <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full bg-slate-700"></div>PowerShell/VS Code</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
+/* ============ THREE.JS HERO ============ */
+(function initWebGL(){
+  if(REDUCED || !window.THREE) return;
+  try{
+    const holder = document.getElementById("webgl");
+    const scene = new THREE.Scene();
+    const cam = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, .1, 100);
+    cam.position.z = 6;
+    const renderer = new THREE.WebGLRenderer({alpha:true, antialias:true});
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    holder.appendChild(renderer.domElement);
 
-    <!-- PROJECTS SECTION -->
-    <section id="projects" class="py-24">
-        <div class="max-w-6xl mx-auto px-6">
-            <h3 class="text-3xl font-bold text-white mb-12 flex items-center gap-3">
-                <i data-lucide="folder-git-2" class="text-indigo-400"></i> Featured Work.
-            </h3>
-            
-            <!-- Flagship Project: AI Project Manager -->
-            <div class="group rounded-2xl bg-slate-900/50 border border-slate-800 overflow-hidden transition-all hover:border-indigo-500/50 hover:shadow-[0_0_40px_-15px_rgba(99,102,241,0.2)]">
-                <div class="grid md:grid-cols-5 h-full">
-                    <div class="md:col-span-3 p-8 md:p-12 flex flex-col justify-center">
-                        <div class="flex items-center gap-3 mb-4">
-                            <span class="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-indigo-500/10 text-indigo-400 rounded-full border border-indigo-500/20">Flagship Project</span>
-                        </div>
-                        <h4 class="text-2xl md:text-3xl font-bold text-white mb-4">AI Project Manager</h4>
-                        <p class="text-slate-400 mb-6 leading-relaxed">
-                            A modern full-stack project management platform enhanced with AI. Built to streamline workflows, automate task tracking, and provide intelligent insights for development teams directly within their workspace.
-                        </p>
-                        
-                        <!-- Tech Stack Tags -->
-                        <div class="flex flex-wrap gap-2 mb-8">
-                            <span class="px-3 py-1 bg-slate-950 border border-slate-800 rounded-md text-xs font-medium text-slate-300 hover:border-slate-600 transition-colors">Next.js</span>
-                            <span class="px-3 py-1 bg-slate-950 border border-slate-800 rounded-md text-xs font-medium text-slate-300 hover:border-slate-600 transition-colors">TypeScript</span>
-                            <span class="px-3 py-1 bg-slate-950 border border-slate-800 rounded-md text-xs font-medium text-slate-300 hover:border-slate-600 transition-colors">Tailwind CSS</span>
-                            <span class="px-3 py-1 bg-slate-950 border border-slate-800 rounded-md text-xs font-medium text-slate-300 hover:border-slate-600 transition-colors">PostgreSQL</span>
-                            <span class="px-3 py-1 bg-slate-950 border border-slate-800 rounded-md text-xs font-medium text-slate-300 hover:border-slate-600 transition-colors">Prisma</span>
-                        </div>
-                        
-                        <!-- Actions -->
-                        <div class="flex flex-wrap gap-4">
-                            <a href="#" class="flex items-center gap-2 text-sm font-medium text-slate-900 bg-white hover:bg-slate-200 px-5 py-2.5 rounded-lg transition-colors">
-                                <i data-lucide="external-link" class="w-4 h-4"></i> Live Demo
-                            </a>
-                            <a href="[https://github.com/nabingautam7](https://github.com/nabingautam7)" target="_blank" class="flex items-center gap-2 text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 px-5 py-2.5 rounded-lg transition-colors">
-                                <i data-lucide="github" class="w-4 h-4"></i> Source Code
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <!-- Abstract Dashboard Visual -->
-                    <div class="md:col-span-2 bg-slate-950 border-l border-slate-800 flex items-center justify-center p-8 min-h-[300px] relative overflow-hidden">
-                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48L3N2Zz4=')]"></div>
-                        
-                        <div class="w-full max-w-sm rounded-lg border border-slate-800 bg-slate-900 shadow-2xl relative z-10 flex flex-col group-hover:-translate-y-2 transition-transform duration-500">
-                            <!-- Fake Window Header -->
-                            <div class="h-8 w-full border-b border-slate-800 flex items-center px-4 gap-2 bg-slate-950/80 rounded-t-lg">
-                                <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-slate-700"></div>
-                            </div>
-                            <!-- Fake Dashboard Content -->
-                            <div class="p-4 flex gap-4">
-                                <div class="w-1/3 space-y-2">
-                                    <div class="h-4 w-full rounded bg-slate-800"></div>
-                                    <div class="h-4 w-3/4 rounded bg-slate-800"></div>
-                                    <div class="h-4 w-5/6 rounded bg-slate-800"></div>
-                                </div>
-                                <div class="w-2/3 flex flex-col gap-3">
-                                    <div class="w-full h-12 rounded bg-indigo-500/10 border border-indigo-500/20 flex items-center px-3 gap-2">
-                                        <i data-lucide="sparkles" class="w-4 h-4 text-indigo-400"></i>
-                                        <div class="h-2 w-1/2 rounded bg-indigo-400/50"></div>
-                                    </div>
-                                    <div class="w-full h-16 rounded bg-slate-800/50 border border-slate-700/50"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    const group = new THREE.Group(); scene.add(group);
+    const geo = new THREE.IcosahedronGeometry(2.1, 1);
+    const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geo),
+      new THREE.LineBasicMaterial({color:0xd9ff3f, transparent:true, opacity:.28}));
+    group.add(wire);
+    group.add(new THREE.Mesh(new THREE.IcosahedronGeometry(1.35, 1),
+      new THREE.MeshBasicMaterial({color:0x111114})));
+    group.add(new THREE.Points(geo, new THREE.PointsMaterial({color:0xf2f1ed, size:.035, transparent:true, opacity:.85})));
+    const N = 900, pos = new Float32Array(N*3);
+    for(let i=0;i<N*3;i++) pos[i] = (Math.random()-.5)*22;
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute("position", new THREE.BufferAttribute(pos,3));
+    const stars = new THREE.Points(pGeo, new THREE.PointsMaterial({color:0x8b8b86, size:.02, transparent:true, opacity:.6}));
+    scene.add(stars);
 
-    <!-- JOURNEY SECTION -->
-    <section id="journey" class="py-24 bg-slate-900/30 border-y border-slate-800/50">
-        <div class="max-w-3xl mx-auto px-6">
-            <h3 class="text-3xl font-bold text-white mb-12 text-center">Development Journey.</h3>
-            
-            <div class="relative border-l border-slate-800 ml-3 md:ml-0 md:pl-8 space-y-12">
-                
-                <!-- Item 1 -->
-                <div class="relative pl-8 md:pl-0">
-                    <div class="absolute -left-[41px] md:-left-[41px] top-1 h-5 w-5 rounded-full border-4 border-slate-950 bg-indigo-500"></div>
-                    <div class="bg-slate-950 border border-slate-800 p-6 rounded-xl hover:border-slate-700 transition-colors">
-                        <span class="text-sm font-medium text-indigo-400 mb-2 block">Current Focus</span>
-                        <h4 class="text-xl font-bold text-white mb-2">Building AI-Powered Applications</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Developing the "AI Project Manager" using Next.js and Prisma, integrating AI features to solve real-world productivity challenges.</p>
-                    </div>
-                </div>
+    let tx=0, ty=0;
+    addEventListener("mousemove", e=>{ tx = (e.clientX/innerWidth - .5); ty = (e.clientY/innerHeight - .5); });
+    const clock = new THREE.Clock();
+    let inView = true;
+    new IntersectionObserver(([e])=>inView = e.isIntersecting).observe(document.getElementById("hero"));
+    (function loop(){
+      requestAnimationFrame(loop);
+      if(!inView) return;
+      const t = clock.getElapsedTime();
+      group.rotation.y = t*.12 + tx*.6;
+      group.rotation.x = Math.sin(t*.15)*.15 + ty*.4;
+      group.scale.setScalar(1 + Math.sin(t*.8)*.03);
+      stars.rotation.y = t*.015;
+      renderer.render(scene, cam);
+    })();
+    addEventListener("resize", ()=>{
+      cam.aspect = innerWidth/innerHeight; cam.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+    gsap.to(group.position, {y:-2.2, ease:"none",
+      scrollTrigger:{trigger:"#hero", start:"top top", end:"bottom top", scrub:true}});
+    gsap.to(group.scale, {x:.6,y:.6,z:.6, ease:"none",
+      scrollTrigger:{trigger:"#hero", start:"top top", end:"bottom top", scrub:true}});
+  }catch(e){}
+})();
 
-                <!-- Item 2 -->
-                <div class="relative pl-8 md:pl-0">
-                    <div class="absolute -left-[41px] md:-left-[41px] top-1 h-5 w-5 rounded-full border-4 border-slate-950 bg-slate-700"></div>
-                    <div class="bg-slate-950 border border-slate-800 p-6 rounded-xl hover:border-slate-700 transition-colors">
-                        <span class="text-sm font-medium text-slate-500 mb-2 block">Expansion</span>
-                        <h4 class="text-xl font-bold text-white mb-2">Mastering the Modern Backend</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Learned PostgreSQL and Prisma to handle robust data modeling. Shifted focus toward full-stack architecture and API integrations.</p>
-                    </div>
-                </div>
+/* ============ PRELOADER — letter-stagger word ============ */
+const num = document.getElementById("load-num");
+const lw = document.getElementById("loader-word");
+lw.innerHTML = lw.textContent.split("").map(c=>`<span>${c}</span>`).join("");
+const heroTL = gsap.timeline({paused:true});
+if(!REDUCED){
+  const cnt = {v:0};
+  gsap.timeline()
+    .from("#loader-word span",{yPercent:110,duration:.6,stagger:.05,ease:"power4.out",
+      onStart:()=>gsap.set("#loader-word",{opacity:1})})
+    .to(cnt,{v:100,duration:1.5,ease:"power2.inOut",onUpdate:()=>num.textContent=String(Math.round(cnt.v)).padStart(2,"0")},"-=.3")
+    .to("#loader .bar",{scaleX:1,duration:1.5,ease:"power2.inOut"}, "<")
+    .to("#loader-word span",{yPercent:-110,duration:.4,stagger:.03,ease:"power3.in"})
+    .to("#loader",{yPercent:-100,duration:.9,ease:"power4.inOut",onComplete:()=>document.getElementById("loader").remove()},"-=.1")
+    .add(()=>heroTL.play(),"-=.35");
+  heroTL
+    .from("h1 .row span",{yPercent:115,rotate:4,duration:1.15,stagger:.1,ease:"power4.out"})
+    .from(".hero .rv",{opacity:0,y:26,duration:.9,stagger:.09,ease:"power3.out"},"-=.6")
+    .from("header",{y:-40,opacity:0,duration:.8,ease:"power3.out"},"-=.7")
+    .from(".spin-badge",{scale:0,rotate:-90,duration:1,ease:"back.out(1.6)"},"-=.8");
+}else{
+  document.getElementById("loader").remove();
+}
 
-                <!-- Item 3 -->
-                <div class="relative pl-8 md:pl-0">
-                    <div class="absolute -left-[41px] md:-left-[41px] top-1 h-5 w-5 rounded-full border-4 border-slate-950 bg-slate-700"></div>
-                    <div class="bg-slate-950 border border-slate-800 p-6 rounded-xl hover:border-slate-700 transition-colors">
-                        <span class="text-sm font-medium text-slate-500 mb-2 block">Foundation</span>
-                        <h4 class="text-xl font-bold text-white mb-2">Modern Web Development</h4>
-                        <p class="text-slate-400 text-sm leading-relaxed">Transitioned to React and TypeScript. Built practical projects to solidify understanding of component-based architecture and state management.</p>
-                    </div>
-                </div>
+/* ============ SMOOTH SCROLL ============ */
+let lenis = null;
+if(!REDUCED){
+  lenis = new Lenis({lerp:.09});
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add(t=>lenis.raf(t*1000));
+  gsap.ticker.lagSmoothing(0);
+  gsap.to("#progress",{scaleX:1,ease:"none",scrollTrigger:{start:0,end:"max",scrub:.3}});
+}
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener("click",e=>{
+    const t = document.querySelector(a.getAttribute("href"));
+    if(!t) return;
+    e.preventDefault();
+    navLinks.classList.remove("open"); menuBtn.textContent="Menu";
+    if(lenis) lenis.scrollTo(t,{offset:-70}); else t.scrollIntoView();
+  });
+});
 
-            </div>
-        </div>
-    </section>
+/* ============ NAV ============ */
+const header = document.getElementById("header");
+let lastY = 0;
+addEventListener("scroll", ()=>{
+  const y = scrollY;
+  header.classList.toggle("scrolled", y > 60);
+  if(y > 400 && y > lastY + 4) header.classList.add("hidden");
+  else if(y < lastY - 4 || y < 400) header.classList.remove("hidden");
+  lastY = y;
+},{passive:true});
+const menuBtn = document.getElementById("menu-btn"), navLinks = document.getElementById("nav-links");
+menuBtn.addEventListener("click",()=>{
+  const open = navLinks.classList.toggle("open");
+  menuBtn.textContent = open ? "Close" : "Menu";
+  menuBtn.setAttribute("aria-expanded", open);
+});
 
-    <!-- CONTACT SECTION -->
-    <section id="contact" class="py-32">
-        <div class="max-w-xl mx-auto px-6 text-center">
-            <h3 class="text-3xl md:text-4xl font-bold text-white mb-6">Have an idea?</h3>
-            <p class="text-slate-400 mb-10 text-lg">
-                Let's build something meaningful together. Whether it's a new project, an open-source collaboration, or just a chat about tech.
-            </p>
-            <a href="mailto:contact@nabingautam7.com.np" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold transition-all shadow-lg shadow-indigo-500/25">
-                <i data-lucide="mail" class="w-5 h-5"></i> Say Hello
-            </a>
-            
-            <div class="mt-16 pt-8 border-t border-slate-800 flex justify-center gap-6">
-                <a href="[https://github.com/nabingautam7](https://github.com/nabingautam7)" target="_blank" class="text-slate-500 hover:text-white transition-colors">
-                    <span class="sr-only">GitHub</span>
-                    <i data-lucide="github" class="w-6 h-6"></i>
-                </a>
-                <a href="#" class="text-slate-500 hover:text-indigo-400 transition-colors">
-                    <span class="sr-only">LinkedIn</span>
-                    <i data-lucide="linkedin" class="w-6 h-6"></i>
-                </a>
-                <a href="#" class="text-slate-500 hover:text-cyan-400 transition-colors">
-                    <span class="sr-only">Website</span>
-                    <i data-lucide="globe" class="w-6 h-6"></i>
-                </a>
-            </div>
-        </div>
-    </section>
+/* ============ CUSTOM CURSOR + VIEW LABEL ============ */
+if(matchMedia("(hover:hover)").matches && !REDUCED){
+  const dot = document.getElementById("cursor-dot"), ring = document.getElementById("cursor-ring");
+  let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+  addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;});
+  gsap.ticker.add(()=>{
+    rx += (mx-rx)*.16; ry += (my-ry)*.16;
+    dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
+    ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+  });
+  document.querySelectorAll("a,button,.chip,.stat,.skill-chip,.about-facts div").forEach(el=>{
+    el.addEventListener("mouseenter",()=>document.body.classList.add("cursor-grow"));
+    el.addEventListener("mouseleave",()=>document.body.classList.remove("cursor-grow"));
+  });
+  document.querySelectorAll(".project").forEach(el=>{
+    el.addEventListener("mouseenter",()=>document.body.classList.add("cursor-view"));
+    el.addEventListener("mouseleave",()=>document.body.classList.remove("cursor-view"));
+  });
+}
 
-    <!-- FOOTER -->
-    <footer class="py-8 bg-slate-950 border-t border-slate-900 text-center">
-        <p class="text-slate-500 text-sm font-medium">
-            &copy; 2024 Nabin Gautam. Building modern software, one project at a time.
-        </p>
-    </footer>
+/* ============ MAGNETIC BUTTONS ============ */
+if(!REDUCED && matchMedia("(hover:hover)").matches){
+  document.querySelectorAll(".magnetic").forEach(btn=>{
+    btn.addEventListener("mousemove",e=>{
+      const r = btn.getBoundingClientRect();
+      gsap.to(btn,{x:(e.clientX-r.left-r.width/2)*.35,y:(e.clientY-r.top-r.height/2)*.35,duration:.4,ease:"power3.out"});
+    });
+    btn.addEventListener("mouseleave",()=>gsap.to(btn,{x:0,y:0,duration:.7,ease:"elastic.out(1,.4)"}));
+  });
+}
 
-    <!-- Initialize Icons -->
-    <script>
-        lucide.createIcons();
-    </script>
+/* ============ 3D PHOTO CARD — tilt, float, glare ============ */
+(function photo3D(){
+  const card = document.getElementById("photo-card");
+  if(!card) return;
+  if(!REDUCED) gsap.to(card,{y:-10,duration:2.6,ease:"sine.inOut",yoyo:true,repeat:-1});
+  if(matchMedia("(hover:hover)").matches && !REDUCED){
+    const glare = card.querySelector(".glare");
+    card.addEventListener("mousemove",e=>{
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX-r.left)/r.width, py = (e.clientY-r.top)/r.height;
+      gsap.to(card,{rotateY:(px-.5)*22,rotateX:(0.5-py)*18,duration:.5,ease:"power2.out"});
+      glare.style.setProperty("--gx", (px*100)+"%");
+      glare.style.setProperty("--gy", (py*100)+"%");
+    });
+    card.addEventListener("mouseleave",()=>gsap.to(card,{rotateX:0,rotateY:0,duration:.9,ease:"elastic.out(1,.45)"}));
+  }
+})();
+
+/* ============ FLOATING PROJECT PREVIEW ============ */
+const preview = document.getElementById("preview"), pcv = document.getElementById("preview-canvas");
+if(matchMedia("(hover:hover)").matches && !REDUCED){
+  const px = gsap.quickTo(preview,"left",{duration:.5,ease:"power3"}),
+        py = gsap.quickTo(preview,"top",{duration:.5,ease:"power3"});
+  addEventListener("mousemove",e=>{px(e.clientX);py(e.clientY);});
+  document.querySelectorAll(".project").forEach(el=>{
+    el.addEventListener("mouseenter",()=>{
+      const p = DATA.projects[+el.dataset.i];
+      drawArt(pcv, +el.dataset.i, p.hue);
+      gsap.fromTo(preview,{opacity:0,scale:.85,rotate:gsap.utils.random(-5,5)},
+        {opacity:1,scale:1,duration:.45,ease:"power3.out"});
+    });
+    el.addEventListener("mouseleave",()=>gsap.to(preview,{opacity:0,scale:.85,duration:.35,ease:"power3.in"}));
+  });
+}
+
+/* ============ SCROLL VELOCITY — skew + marquee speed ============ */
+if(!REDUCED){
+  const proxy = {skew:0};
+  const skewSet = gsap.quickSetter("#project-list","skewY","deg");
+  const clamp = gsap.utils.clamp(-4,4);
+  ScrollTrigger.create({
+    onUpdate(self){
+      const skew = clamp(self.getVelocity()/-350);
+      if(Math.abs(skew) > Math.abs(proxy.skew)){
+        proxy.skew = skew;
+        gsap.to(proxy,{skew:0,duration:.7,ease:"power3",overwrite:true,
+          onUpdate:()=>skewSet(proxy.skew)});
+      }
+    }
+  });
+  const track = document.querySelector(".marquee-track");
+  ScrollTrigger.create({
+    onUpdate(self){
+      const v = gsap.utils.clamp(-3,3, self.getVelocity()/250);
+      gsap.to(track,{timeScale: 1 - v, duration:.3, overwrite:true});
+    }
+  });
+}
+
+/* ============ SKILL TAG WALL — infinite rows, velocity-reactive ============ */
+const rowTweens = [];
+if(!REDUCED){
+  document.querySelectorAll(".row-track").forEach((track,i)=>{
+    const dir = +track.dataset.dir;
+    const dur = 22 + i*5;
+    const tween = dir < 0
+      ? gsap.to(track,{xPercent:-50,duration:dur,ease:"none",repeat:-1})
+      : gsap.fromTo(track,{xPercent:-50},{xPercent:0,duration:dur,ease:"none",repeat:-1});
+    rowTweens.push({tween,dir});
+    gsap.from(track.closest(".skill-row"),{opacity:0,y:40,duration:.9,delay:i*.08,ease:"power3.out",
+      scrollTrigger:{trigger:track,start:"top 92%"}});
+  });
+  ScrollTrigger.create({
+    trigger:"#skills", start:"top bottom", end:"bottom top",
+    onUpdate(self){
+      const v = gsap.utils.clamp(-3,3, self.getVelocity()/220);
+      rowTweens.forEach(({tween,dir})=>{
+        gsap.to(tween,{timeScale: 1 + v*dir*-1, duration:.4, overwrite:true});
+      });
+    }
+  });
+  /* giant parallax */
+  gsap.fromTo("#skills-giant",{xPercent:-6},{xPercent:6,ease:"none",
+    scrollTrigger:{trigger:"#skills",start:"top bottom",end:"bottom top",scrub:true}});
+}
+/* chip pop on hover */
+if(matchMedia("(hover:hover)").matches && !REDUCED){
+  document.querySelectorAll(".skill-chip").forEach(ch=>{
+    ch.addEventListener("mouseenter",()=>gsap.to(ch,{scale:1.08,rotate:gsap.utils.random(-3,3),y:-4,duration:.35,ease:"back.out(2)"}));
+    ch.addEventListener("mouseleave",()=>gsap.to(ch,{scale:1,rotate:0,y:0,duration:.5,ease:"power3.out"}));
+  });
+}
+
+/* ============ SCROLL CHOREOGRAPHY ============ */
+if(!REDUCED){
+  document.querySelectorAll(".rv").forEach(el=>{
+    gsap.to(el,{opacity:1,y:0,duration:1,ease:"power3.out",
+      scrollTrigger:{trigger:el,start:"top 88%"}});
+  });
+  const st = document.getElementById("about-statement");
+  st.innerHTML = st.textContent.trim().split(/\s+/).map(w=>`<span class="w">${w}</span>`).join(" ");
+  gsap.to("#about-statement .w",{opacity:1,stagger:.06,ease:"none",
+    scrollTrigger:{trigger:st,start:"top 78%",end:"bottom 45%",scrub:true}});
+  gsap.to("#hero h1",{yPercent:16,opacity:.2,ease:"none",
+    scrollTrigger:{trigger:"#hero",start:"top top",end:"bottom top",scrub:true}});
+  document.querySelectorAll(".label").forEach(el=>{
+    gsap.from(el,{scaleX:0,transformOrigin:"left",duration:1.1,ease:"power4.out",
+      scrollTrigger:{trigger:el,start:"top 90%"}});
+  });
+  document.querySelectorAll(".count").forEach(el=>{
+    const to = +el.dataset.to;
+    ScrollTrigger.create({trigger:el,start:"top 85%",once:true,onEnter:()=>{
+      gsap.fromTo(el,{textContent:0},{textContent:to,duration:1.8,ease:"power2.out",snap:{textContent:1}});
+    }});
+  });
+  // journey timeline draw
+  gsap.to("#exp-progress",{scaleY:1,ease:"none",
+    scrollTrigger:{trigger:"#experience",start:"top 60%",end:"bottom 70%",scrub:true}});
+  // facts rows — slide in with stagger
+  gsap.from("#about-facts div",{x:-34,opacity:0,duration:.7,stagger:.1,ease:"power3.out",
+    scrollTrigger:{trigger:"#about-facts",start:"top 88%"}});
+  // about orb follows mouse
+  const orb = document.getElementById("orb");
+  const ox = gsap.quickTo(orb,"left",{duration:.8,ease:"power3"}),
+        oy = gsap.quickTo(orb,"top",{duration:.8,ease:"power3"});
+  document.getElementById("about").addEventListener("mousemove",e=>{
+    ox(e.clientX); oy(e.clientY);
+  });
+  const orb2 = document.getElementById("orb2");
+  const o2x = gsap.quickTo(orb2,"left",{duration:1,ease:"power3"}),
+        o2y = gsap.quickTo(orb2,"top",{duration:1,ease:"power3"});
+  document.querySelector(".contact").addEventListener("mousemove",e=>{
+    o2x(e.clientX); o2y(e.clientY);
+  });
+  gsap.from(".contact h2 .row span",{yPercent:115,rotate:3,duration:1.1,stagger:.1,ease:"power4.out",
+    scrollTrigger:{trigger:".contact h2",start:"top 85%"}});
+  gsap.fromTo(".giant",{yPercent:60},{yPercent:0,ease:"none",
+    scrollTrigger:{trigger:"footer",start:"top bottom",end:"bottom bottom",scrub:true}});
+  document.querySelectorAll(".project").forEach((el,i)=>{
+    gsap.from(el,{x:i%2? 60:-60,opacity:0,duration:1,ease:"power3.out",
+      scrollTrigger:{trigger:el,start:"top 92%"}});
+  });
+}
+</script>
 </body>
 </html>
